@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>golang on 于硕·Blog</title>
-    <link>https://www.flysnow.org/tags/golang/</link>
+    <link>https://www.yushuo.me/tags/golang/</link>
     <description>Recent content in golang on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 14 Dec 2020 14:43:55 +0800</lastBuildDate><atom:link href="https://www.flysnow.org/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Dec 2020 14:43:55 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【初始Go】| Day1 Go语言特征&amp;开发环境配置</title>
-      <link>https://www.flysnow.org/post/go_babystep1/</link>
+      <link>https://www.yushuo.me/post/go_babystep1/</link>
       <pubDate>Mon, 14 Dec 2020 14:43:55 +0800</pubDate>
       
-      <guid>https://www.flysnow.org/post/go_babystep1/</guid>
+      <guid>https://www.yushuo.me/post/go_babystep1/</guid>
       <description>久闻Go语言大名，了解它是Google开发的一门静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。由于Go对于高并发的处理表现优异，很多互联网大厂纷纷投奔，比如听说字节跳动早期为了快速构建系统，很多后台应用使用Python语言，随着用户量和访问量的增加逐渐使用Go进行替代</description>
     </item>
     
