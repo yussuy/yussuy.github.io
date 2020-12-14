@@ -3,31 +3,53 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://www.flysnow.org/post/myfirst/</loc>
-    <lastmod>2020-12-09T01:26:52+08:00</lastmod>
+    <loc>https://www.flysnow.org/categories/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/tags/go/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/categories/Golang/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/tags/golang/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://www.flysnow.org/post/</loc>
-    <lastmod>2020-12-09T01:26:52+08:00</lastmod>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/tags/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/post/go_babystep1/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://www.flysnow.org/</loc>
+    <lastmod>2020-12-14T14:43:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.flysnow.org/post/myfirst/</loc>
     <lastmod>2020-12-09T01:26:52+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://www.flysnow.org/about/</loc>
     <lastmod>2020-12-09T01:26:32+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.flysnow.org/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://www.flysnow.org/tags/</loc>
   </url>
   
   <url>
