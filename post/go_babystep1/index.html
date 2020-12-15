@@ -210,6 +210,9 @@
 <p>久闻Go语言大名，了解它是Google开发的一门静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。由于Go对于高并发的处理表现优异，很多互联网大厂纷纷投奔，比如听说字节跳动早期为了快速构建系统，很多后台应用使用Python语言，随着用户量和访问量的增加逐渐使用Go进行替代，还有滴滴、腾讯内部也都有很多采用Go语言作为后端语言的项目。</p>
 <p>虽然之前也尝试学习和编写简单Go程序，但并未完全坚持下来，现在重拾起来，并通过学习笔记的方式进行记录，希望借此入门Go语言。</p>
 </blockquote>
+<p>
+        <img class="mx-auto" alt="golang" src="golang.png" />   
+    </p>
 <h2 id="go语言特性">Go语言特性</h2>
 <p>通过查阅资料可以得知Go具有以下特性，</p>
 <ul>
@@ -260,9 +263,11 @@
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#0086b3">export</span> <span style="color:#008080">PATH</span><span style="color:#000;font-weight:bold">=</span><span style="color:#008080">$PATH</span>:/usr/local/go/bin
+// 要求 go 版本 &gt;<span style="color:#000;font-weight:bold">=</span>1.13。
 <span style="color:#0086b3">export</span> <span style="color:#008080">GO111MODULE</span><span style="color:#000;font-weight:bold">=</span>on
 <span style="color:#0086b3">export</span> <span style="color:#008080">GOPROXY</span><span style="color:#000;font-weight:bold">=</span>https://goproxy.cn
 </code></pre></td></tr></table>
@@ -433,6 +438,7 @@ vim /etc/profile
 <p>对于环境变量，<code>GO111MODULE </code>和<code>GOPROXY</code>的作用理解的不是很透彻，翻看了一些博客但还是一知半解，此处不求甚解🙅‍，略略略~，等到了“第8节、包管理”后再回头研究一下这里，参考：</p>
 <p><a href="https://learnku.com/go/t/39086">https://learnku.com/go/t/39086</a></p>
 <p><a href="https://www.cnblogs.com/pu369/p/12068645.html">https://www.cnblogs.com/pu369/p/12068645.html</a></p>
+<p><a href="http://c.biancheng.net/view/4774.html">http://c.biancheng.net/view/4774.html</a></p>
 
         </div>
 
