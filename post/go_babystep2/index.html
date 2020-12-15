@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>【初识Go】| Day2 数据类型、关键字、标识符 | 于硕·Blog</title>
+    <meta property="og:title" content="【初识Go】| Day2 数据类型、关键字、标识符 - 于硕·Blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-12-15T20:28:10&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-12-15T20:28:10&#43;08:00'>
+        
+    <meta name="Keywords" content="golang,go语言,go语言笔记,java,android,blog,博客,项目管理,python,软件架构,公众号,小程序">
+    <meta name="description" content="【初识Go】| Day2 数据类型、关键字、标识符">
+        
+    <meta name="author" content="yussuy">
+    <meta property="og:url" content="https://www.yushuo.me/post/go_babystep2/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://www.yushuo.me">
+                        于硕·Blog
+                    </a>
+                
+                <p class="description">克己 慎独 &amp;&amp; 我的征途，是星辰大海</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://www.yushuo.me">首页</a>
+                    
+                    <a  href="https://www.yushuo.me/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://www.yushuo.me/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://www.yushuo.me/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#数据类型">数据类型</a>
+      <ul>
+        <li><a href="#布尔型">布尔型</a></li>
+        <li><a href="#数字类型">数字类型</a></li>
+        <li><a href="#字符串类型">字符串类型</a></li>
+        <li><a href="#派生类型">派生类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#关键字">关键字</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#标识符">标识符</a></li>
+    <li><a href="#其他知识点">其他知识点</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">【初识Go】| Day2 数据类型、关键字、标识符</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年12月15日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='/categories/Golang'>Golang</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="数据类型">数据类型</h2>
+<p>Go语言中，数据类型用于声明函数和变量。</p>
+<p>数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。</p>
+<p>Go语言的数据类型主要分为以下几种：布尔型、数字类型（包含整型、浮点型、复数）、字符串类型、派生类型。</p>
+<p>![Go数据类型](【初识Go】Day2 Go语言特征&amp;开发环境配置 .assets/Go数据类型-1608043620394.png)</p>
+<h3 id="布尔型">布尔型</h3>
+<p>值为常量<code>true</code>或<code>false</code>。if 和 for 语句的条件部分都是布尔类型的值，并且 <code>==</code> 和 <code>&lt;</code> 等比较操作也会产生布尔型的值。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">var</span> b <span style="color:#458;font-weight:bold">bool</span> = <span style="color:#000;font-weight:bold">true</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="数字类型">数字类型</h3>
+<p>Go中位的运Go 语言的数值类型分为以下几种：整数、浮点数、复数，其中每一种都包含了不同大小的数值类型算采用补码。每种数值类型都决定了对应的大小范围和是否支持正负符号。</p>
+<p>Go中位的运算采用补码。</p>
+<h4 id="1-整数类型">1. 整数类型</h4>
+<p>Go提供有符号和无符号的整数类型，其中int8、int16、int32和int64四种大小截然不同的有符号整数类型，分别对应8、16、32、64 bit（二进制位）大小的有符号整数，与此对应的是 uint8、uint16、uint32 和 uint64 四种无符号整数类型。</p>
+<p>此外还有两种整数类型 int 和 uint，它们分别对应特定 CPU 平台的字长（机器字大小），其中 int 表示有符号整数，应用最为广泛，uint 表示无符号整数。<strong>实际开发中由于编译器和计算机硬件的不同，int 和 uint 所能表示的整数大小会在 32bit 或 64bit 之间变化。</strong></p>
+<p><strong>大多数情况下，我们只需要 int 一种整型即可，它可以用于循环计数器（for 循环中控制循环次数的变量）、数组和切片的索引，以及任何通用目的的整型运算符，通常 int 类型的处理速度也是最快的。</strong></p>
+<p>最后，还有一种无符号的整数类型 uintptr，它没有指定具体的 bit 大小但是足以容纳指针。uintptr 类型只有在底层编程时才需要，特别是 Go 语言和 C 语言函数库或操作系统接口相交互的地方。</p>
+<blockquote>
+<p>尽管在某些特定的运行环境下 int、uint 和 uintptr 的大小可能相等，但是它们依然是不同的类型，比如 int 和 int32，虽然 int 类型的大小也可能是 32 bit，但是在需要把 int 类型当做 int32 类型使用的时候必须显示的对类型进行转换，反之亦然。</p>
+<p>Go 语言中有符号整数采用 2 的补码形式表示，也就是最高 bit 位用来表示符号位，一个 n-bit 的有符号数的取值范围是从 -2^(n-1) 到 2^(n-1)-1。无符号整数的所有 bit 位都用于表示非负数，取值范围是 0 到 2^n-1。例如，int8 类型整数的取值范围是从 -128 到 127，而 uint8 类型整数的取值范围是从 0 到 255。</p>
+</blockquote>
+<h5 id="哪些情况下使用-int-和-uint">哪些情况下使用 int 和 uint</h5>
+<p>程序逻辑对整型范围没有特殊需求。例如，对象的长度使用内建 len () 函数返回，这个长度可以根据不同平台的字节长度进行变化。实际使用中，切片或 map 的元素数量等都可以用 int 来表示。</p>
+<p>反之，在二进制传输、读写文件的结构描述时，为了保持文件的结构不会受到不同编译目标平台字节长度的影响，不要使用 int 和 uint。</p>
+<h4 id="2-浮点类型">2. 浮点类型</h4>
+<p>Go 语言提供了两种精度的浮点数 float32 和 float64。</p>
+<ul>
+<li>常量 math.MaxFloat32 表示 float32 能取到的最大数值，大约是 3.4e38；</li>
+<li>常量 math.MaxFloat64 表示 float64 能取到的最大数值，大约是 1.8e308；</li>
+<li>float32 和 float64 能表示的最小值分别为 1.4e-45 和 4.9e-324。</li>
+</ul>
+<h4 id="3-复数">3. 复数</h4>
+<p>复数的值由三部分组成 RE + IMi，其中 RE 是实数部分，IM 是虚数部分，RE 和 IM 均为 float 类型，而最后的 i 是虚数单位。复数的运算法则可以查阅《<a href="https://baike.baidu.com/item/%E5%A4%8D%E6%95%B0%E8%BF%90%E7%AE%97%E6%B3%95%E5%88%99/2568041?fr=aladdin">复数运算法则</a>》。</p>
+<p>（复数可能更多用在数据挖掘或机器学习相关领域）</p>
+<p>Go中复数：类型有两种，分别是 complex128（64 位实数和虚数）和 complex64（32 位实数和虚数），其中 complex128 为复数的默认类型。</p>
+<p>声明复数的语法格式如下所示：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#998;font-style:italic">/* 
+</span><span style="color:#998;font-style:italic">下面例子中 z 为复数的变量名，complex128 为复数的类型，“=” 后面的 complex 为 Go 语言的内置函数用于为复数赋值，x、y 分别表示构成该复数的两个 float64 类型的数值，x 为实部，y 为虚部。*/</span>
+<span style="color:#000;font-weight:bold">var</span> z <span style="color:#458;font-weight:bold">complex128</span> = <span style="color:#0086b3">complex</span>(x, y)
+<span style="color:#998;font-style:italic">// 可简写为：
+</span><span style="color:#998;font-style:italic"></span>z <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">complex</span>(x, y)
+
+<span style="color:#998;font-style:italic">// 通过 Go 语言的内置函数 real(z) 来获得该复数的实部
+</span><span style="color:#998;font-style:italic"></span>x = <span style="color:#0086b3">real</span>(z)	
+<span style="color:#998;font-style:italic">// 通过 Go 语言的内置函数 imag(z) 来获得该复数的虚部
+</span><span style="color:#998;font-style:italic"></span>y = <span style="color:#0086b3">imag</span>(z) 
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>复数也可以用 == 和！= 进行相等比较，只有两个复数的实部和虚部都相等的时候它们才是相等的。</strong></p>
+<p>Go 语言内置的 math/cmplx 包中提供了很多操作复数的公共方法，实际操作中建议大家使用复数默认的 complex128 类型，因为这些内置的包中都使用 complex128 类型作为参数。</p>
+<h4 id="字符类型">★字符类型</h4>
+<p>字符串中的每一个元素叫做 “字符”，在遍历或者单个获取字符串元素时可以获得字符。</p>
+<p>Go 语言的字符有以下两种：</p>
+<ul>
+<li>一种是 uint8 类型，或者叫 byte 型，代表了 ASCII 码的一个字符。</li>
+<li>另一种是 rune 类型，代表一个 UTF-8 字符，当需要处理中文、日文或者其他复合字符时，则需要用到 rune 类型。rune 类型等价于 int32 类型。</li>
+</ul>
+<h3 id="字符串类型">字符串类型</h3>
+<p>字符串就是一串固定长度的字符连接起来的字符序列，Go 的字符串是由单个字节连接起来。Go 语言的字符串的字节使用 UTF-8 编码标识 Unicode 文本，即可支持中文。</p>
+<h3 id="派生类型">派生类型</h3>
+<ul>
+<li>(a) 指针类型（Pointer）</li>
+<li>(b) 数组类型</li>
+<li>(c) 结构化类型 (struct)</li>
+<li>(d) Channel 类型</li>
+<li>(e) 函数类型</li>
+<li>(f) 切片类型</li>
+<li>(g) 接口类型（interface）</li>
+<li>(h) Map 类型</li>
+</ul>
+<p>清晰完备的预定义基础类型，使得开发跨平台应用时无须过多考虑符号和长度差异。</p>
+<p>![image-20201215225035055](【初识Go】Day2 Go语言特征&amp;开发环境配置 .assets/image-20201215225035055.png)</p>
+<p>![image-20201215225055263](【初识Go】Day2 Go语言特征&amp;开发环境配置 .assets/image-20201215225055263.png)</p>
+<h2 id="关键字">关键字</h2>
+<h4 id="25-个关键字或保留字">25 个关键字或保留字</h4>
+<p>Go语言只有 25 个关键字。</p>
+<p>不像 C++ 关键字那么多，原本 C++98/03 有 63 个关键字，后来 C++11 又加了 10 个，变成了 73 个。
+其中 13 个关键字与 C++ 相同（break、default、switch、case、if、else、const、continue、for、return、map、struct、goto），用法也是类似。其它的 12 个不同（func、interface、select、defer、go、chan、package、falthrough、range、type、import、var）。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>关键字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>break</td>
+<td>用于跳出循环</td>
+</tr>
+<tr>
+<td>2</td>
+<td>case</td>
+<td>选择结构标签</td>
+</tr>
+<tr>
+<td>3</td>
+<td>chan</td>
+<td>定义 channel</td>
+</tr>
+<tr>
+<td>4</td>
+<td>const</td>
+<td>定义常量</td>
+</tr>
+<tr>
+<td>5</td>
+<td>continue</td>
+<td>跳过本次循环</td>
+</tr>
+<tr>
+<td>6</td>
+<td>default</td>
+<td>用于选择结构的默认选项（switch、select）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>defer</td>
+<td>延迟执行内容（收尾工作）有点类似 C++ 的析构，但是它是再函数结尾的时候去执行（也就是栈即将被释放的时候）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>else</td>
+<td>选择结构 - 否则</td>
+</tr>
+<tr>
+<td>9</td>
+<td>fallthrough</td>
+<td>如果 case 带有 fallthrough，程序会继续执行下一条 case, 不会再判断下一条 case 的值</td>
+</tr>
+<tr>
+<td>10</td>
+<td>for</td>
+<td>循环</td>
+</tr>
+<tr>
+<td>11</td>
+<td>func</td>
+<td>定义函数</td>
+</tr>
+<tr>
+<td>12</td>
+<td>go</td>
+<td>并发执行</td>
+</tr>
+<tr>
+<td>13</td>
+<td>goto</td>
+<td>跳转语句</td>
+</tr>
+<tr>
+<td>14</td>
+<td>if</td>
+<td>选择结构 - 如果</td>
+</tr>
+<tr>
+<td>15</td>
+<td>import</td>
+<td>导入包</td>
+</tr>
+<tr>
+<td>16</td>
+<td>interface</td>
+<td>定义接口</td>
+</tr>
+<tr>
+<td>17</td>
+<td>map</td>
+<td>Map 是一种无序的集合，我们可以像迭代数组和切片那样迭代它，它是使用 hash 表来实现的。</td>
+</tr>
+<tr>
+<td>18</td>
+<td>package</td>
+<td>包管理</td>
+</tr>
+<tr>
+<td>19</td>
+<td>range</td>
+<td>从 slice、map 等结构中取元素</td>
+</tr>
+<tr>
+<td>20</td>
+<td>return</td>
+<td>用于在函数内部，退出函数执行过程</td>
+</tr>
+<tr>
+<td>21</td>
+<td>select</td>
+<td>go 语言特有的 channel 选择结构</td>
+</tr>
+<tr>
+<td>22</td>
+<td>struct</td>
+<td>定义结构体</td>
+</tr>
+<tr>
+<td>23</td>
+<td>switch</td>
+<td>选择结构</td>
+</tr>
+<tr>
+<td>24</td>
+<td>type</td>
+<td>定义类型</td>
+</tr>
+<tr>
+<td>25</td>
+<td>var</td>
+<td>定义变量</td>
+</tr>
+</tbody>
+</table>
+<h4 id="36-个预定义标识符">36 个预定义标识符</h4>
+<p>还有 36 个预定义标识符，其中包含了基本类型的名称和一些基本的内置函数，见下表：</p>
+<table>
+<thead>
+<tr>
+<th>内建常量</th>
+<th>内建类型</th>
+<th>内建函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>true</td>
+<td>int</td>
+<td>make</td>
+</tr>
+<tr>
+<td>false</td>
+<td>int8</td>
+<td>len</td>
+</tr>
+<tr>
+<td>iota</td>
+<td>int16</td>
+<td>cap</td>
+</tr>
+<tr>
+<td>nil</td>
+<td>int32</td>
+<td>new</td>
+</tr>
+<tr>
+<td>-</td>
+<td>int64</td>
+<td>append</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uint</td>
+<td>copy</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uint8</td>
+<td>close</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uint16</td>
+<td>delete</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uint32</td>
+<td>complex</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uint64</td>
+<td>real</td>
+</tr>
+<tr>
+<td>-</td>
+<td>uintprt</td>
+<td>imag</td>
+</tr>
+<tr>
+<td>-</td>
+<td>float32</td>
+<td>panic</td>
+</tr>
+<tr>
+<td>-</td>
+<td>float64</td>
+<td>recover</td>
+</tr>
+<tr>
+<td>-</td>
+<td>complex64</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>complex128</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>bool</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>byte</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>rune</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-</td>
+<td>error</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="标识符">标识符</h2>
+<p>标识符用来命名变量、类型等程序实体。</p>
+<p>一个标识符实际上就是一个或是多个字母 (A~ Z 和 a~ z) 数字 (0~9)、下划线 “_” 组成的序列，但是第一个字符必须是字母或下划线而不能是数字。</p>
+<h2 id="其他知识点">其他知识点</h2>
+<ul>
+<li>程序一般由关键字、常量、变量、运算符、类型和函数组成。</li>
+<li>程序中可能会使用到这些分隔符：括号 ()，中括号 [] 和大括号 {}。</li>
+<li>程序中可能会使用到这些标点符号：<code>.</code>、<code>,</code>、<code>;</code>、<code>:</code> 和 <code>…</code>。</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="http://c.biancheng.net/view/13.html">http://c.biancheng.net/view/13.html</a></p>
+<p><a href="https://www.runoob.com/go/go-data-types.html">https://www.runoob.com/go/go-data-types.html</a></p>
+<p><a href="https://github.com/datawhalechina/go-talent/blob/master/1.%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%A0%87%E8%AF%86%E7%AC%A6.md">https://github.com/datawhalechina/go-talent/blob/master/1.%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E5%85%B3%E9%94%AE%E5%AD%97%E3%80%81%E6%A0%87%E8%AF%86%E7%AC%A6.md</a></p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://www.yushuo.me">yussuy</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.yushuo.me/post/go_babystep2/">https://www.yushuo.me/post/go_babystep2/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/go_babystep1/">【初识Go】| Day1 Go语言特征&amp;开发环境配置</a></li>
+        
+        <li><a href="/post/myfirst/">Myfirst</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+        <li><a href="/search/">搜索</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/go'>go</a></li>
+                
+                <li><a href='/tags/golang'>golang</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "your github repo"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2020 <a href="https://www.yushuo.me">于硕·Blog By yussuy</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://www.yushuo.me/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://www.yushuo.me">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep2/" title="【初识Go】| Day2 数据类型、关键字、标识符">【初识Go】| Day2 数据类型、关键字、标识符</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep1/" title="【初识Go】| Day1 Go语言特征&amp;开发环境配置">【初识Go】| Day1 Go语言特征&amp;开发环境配置</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/myfirst/" title="Myfirst">Myfirst</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title" style="color:red">福利派送</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a href="" title="【2019双12】ALL IN CLoud 低至1折" target="_blank" style="color:red">
+                
+                    <img src="https://img.alicdn.com/tfs/TB1_rYHo7P2gK0jSZPxXXacQpXa-690-388.jpg">
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href="" title="助力产业智慧升级，云服务器首年88元起，更有千元代金券礼包免费领！" target="_blank" style="color:red">
+                
+                    <img src="https://upload-dianshi-1255598498.file.myqcloud.com/345-7c71532bd4935fbdd9a67c1a71e577b1767b805c.200%E7%89%88%E6%9C%ACB.jpg">
+                
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://www.yushuo.me/categories/Golang/">Golang (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://www.yushuo.me/tags/go/">go</a>
+    
+    <a href="https://www.yushuo.me/tags/golang/">golang</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://blog.csdn.net/u014759944" title="我的CSDN博客">我的CSDN博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="https://cloud.tencent.com/developer/user/1424460/activities" title="我的腾讯云&#43;社区">我的腾讯云&#43;社区</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://www.yushuo.me/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
