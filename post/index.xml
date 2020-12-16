@@ -6,14 +6,23 @@
     <description>Recent content in Posts on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 15 Dec 2020 20:28:10 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Dec 2020 19:53:29 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day3 变量、常量、枚举（iota）</title>
+      <link>https://www.yushuo.me/post/go_babystep3/</link>
+      <pubDate>Wed, 16 Dec 2020 19:53:29 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep3/</guid>
+      <description>变量 变量，计算机语言能存储计算结果或表示值的抽象概念。可以通过变量名访问，变量名由字母、数字、下划线组成，其中首个字符不能为数字 var 声明语句可以创建一个特定类型的变量，然后给变量附加一个名字，并且设置变量的初始值。变量声明的一般语法如下： 1 var 变量名字 类型 = 表达式 其中”类型”或“=表</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day2 数据类型、关键字、标识符</title>
       <link>https://www.yushuo.me/post/go_babystep2/</link>
       <pubDate>Tue, 15 Dec 2020 20:28:10 +0800</pubDate>
       
       <guid>https://www.yushuo.me/post/go_babystep2/</guid>
-      <description>数据类型 Go语言中，数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。 Go语言的数据类型主要分为以下几种：布尔型、数字类型（包含整型、浮点型、复数）、字符串类型、派生类型。 ![Go数</description>
+      <description>数据类型 Go语言中，数据类型用于声明函数和变量。 数据类型的出现是为了把数据分成所需内存大小不同的数据，编程的时候需要用大数据的时候才需要申请大内存，就可以充分利用内存。 Go语言的数据类型主要分为以下几种：布尔型、数字类型（包含整型、浮点型、复数）、字符串类型、派生类型。 布尔型 值为</description>
     </item>
     
     <item>
