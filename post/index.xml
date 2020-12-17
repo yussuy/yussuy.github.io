@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 16 Dec 2020 19:53:29 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Dec 2020 16:26:51 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day4 运算符、控制语句</title>
+      <link>https://www.yushuo.me/post/go_babystep4/</link>
+      <pubDate>Thu, 17 Dec 2020 16:26:51 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep4/</guid>
+      <description>运算符 运算符用于在程序运行时执行数学或逻辑运算。 Go 语言内置的运算符有： 算术运算符 关系运算符 逻辑运算符 位运算符 赋值运算符 其他运算符 算数运算符 运算符 描述 实例 + 相加 A + B 输出结果 30 - 相减 A - B 输出结果 -10 * 相乘 A * B 输出结果 200 / 相除 B / A 输出结果 2 % 求余 B % A 输出结果 0 ++ 自增 A++ 输出结果 11</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day3 变量、常量、枚举（iota）</title>
       <link>https://www.yushuo.me/post/go_babystep3/</link>
