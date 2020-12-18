@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 17 Dec 2020 16:26:51 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Dec 2020 16:26:51 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day5 字典、字符串</title>
+      <link>https://www.yushuo.me/post/go_babystep5/</link>
+      <pubDate>Fri, 18 Dec 2020 16:26:51 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep5/</guid>
+      <description>字典 字典定义 字典/哈希表是一种巧妙并且实用的数据字结构。它是一个无序的key/value对的集合，其中所有的key都是不同的，然后通过给定的key可以在常数时间复杂度内检索、更新或删除对应的value。 1 2 3 4 5 6 7 8 9 10 11 // 内置的make函数可以创建一个map： var m1 map[string]int m2 := make(map[int]interface{}, 100) ages</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day4 运算符、控制语句</title>
       <link>https://www.yushuo.me/post/go_babystep4/</link>
