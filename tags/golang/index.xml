@@ -6,7 +6,16 @@
     <description>Recent content in golang on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 19 Dec 2020 20:11:49 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 Dec 2020 15:09:16 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day7 函数</title>
+      <link>https://www.yushuo.me/post/go_babystep7/</link>
+      <pubDate>Sun, 20 Dec 2020 15:09:16 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep7/</guid>
+      <description>函数定义 在go语言中函数定义格式如下： 1 2 3 func functionName([parameter list]) [returnTypes]{ //body } 函数由func关键字进行声明。 functionName：代表函数名。 parameter list：代表参数列表，函数的参数是可选的，可以包含参数也可以不包含参数。 returnTypes：返回值类型，返回值是可选的，可以有返回值，也可以没有返回</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day6 数组、切片</title>
       <link>https://www.yushuo.me/post/go_babystep6/</link>
