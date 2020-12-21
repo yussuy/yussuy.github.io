@@ -9,20 +9,20 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>【初识Go】| Day3 变量、常量、枚举（iota） | 于硕·Blog</title>
-    <meta property="og:title" content="【初识Go】| Day3 变量、常量、枚举（iota） - 于硕·Blog">
+    <title>【初识Go】| Day8 结构体、方法、接口 | 于硕·Blog</title>
+    <meta property="og:title" content="【初识Go】| Day8 结构体、方法、接口 - 于硕·Blog">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2020-12-16T19:53:29&#43;08:00'>
+    <meta property="article:published_time" content='2020-12-21T22:11:36&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2020-12-16T19:53:29&#43;08:00'>
+    <meta property="article:modified_time" content='2020-12-21T22:11:36&#43;08:00'>
         
     <meta name="Keywords" content="golang,go语言,go语言笔记,java,android,blog,博客,项目管理,python,软件架构,公众号,小程序">
-    <meta name="description" content="【初识Go】| Day3 变量、常量、枚举（iota）">
+    <meta name="description" content="【初识Go】| Day8 结构体、方法、接口">
         
     <meta name="author" content="yussuy">
-    <meta property="og:url" content="https://www.yushuo.me/post/go_babystep3/">
+    <meta property="og:url" content="https://www.yushuo.me/post/go_babystep8/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -143,14 +143,28 @@
     <div class="post-toc-content">
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#变量">变量</a>
+    <li><a href="#结构体">结构体</a>
       <ul>
-        <li><a href="#简短变量声明">简短变量声明</a></li>
+        <li><a href="#结构体的定义">结构体的定义</a></li>
+        <li><a href="#结构体使用">结构体使用</a></li>
+        <li><a href="#标签">标签</a></li>
+        <li><a href="#内嵌结构体">内嵌结构体</a></li>
       </ul>
     </li>
-    <li><a href="#常量">常量</a></li>
-    <li><a href="#iota常量生成器">iota常量生成器</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
+    <li><a href="#方法">方法</a>
+      <ul>
+        <li><a href="#方法定义">方法定义</a></li>
+        <li><a href="#方法接收者">方法接收者</a></li>
+      </ul>
+    </li>
+    <li><a href="#接口">接口</a>
+      <ul>
+        <li><a href="#接口定义">接口定义</a></li>
+        <li><a href="#实现接口">实现接口</a></li>
+        <li><a href="#类型断言">类型断言</a></li>
+        <li><a href="#空接口">空接口</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>
@@ -184,10 +198,10 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">【初识Go】| Day3 变量、常量、枚举（iota）</h1>
+            <h1 class="post-title">【初识Go】| Day8 结构体、方法、接口</h1>
         </header>
         <date class="post-meta meta-date">
-            2020年12月16日
+            2020年12月21日
         </date>
         
         <div class="post-meta">
@@ -205,34 +219,161 @@
         
         
         <div class="post-content">
-            <h2 id="变量">变量</h2>
-<p>变量，计算机语言能存储计算结果或表示值的抽象概念。可以通过变量名访问，变量名由字母、数字、下划线组成，其中首个字符不能为数字</p>
-<p>var 声明语句可以创建一个特定类型的变量，然后给变量附加一个名字，并且设置变量的初始值。变量声明的一般语法如下：</p>
+            <h2 id="结构体">结构体</h2>
+<p>结构体是一种聚合的数据类型，是由零个或多个任意类型的值聚合成的实体。每个值称为结构体的成员。Go 语言中没有“类”的概念，也不支持像继承这种面向对象的概念。但是Go 语言的结构体与“类”都是复合结构体，而且Go 语言中结构体的组合方式比面向对象具有更高的扩展性和灵活性。比如用结构体的经典案例处理公司的员工信息，每个员工信息包含一个唯一的员工编号、员工的名字、家庭住址、出生日期、工作岗位、薪资、上级领导等等。所有的这些信息都需要绑定到一个实体中，可以作为一个整体单元被复制，作为函数的参数或返回值，或者是被存储到数组中，等等。</p>
+<h3 id="结构体的定义">结构体的定义</h3>
+<p>结构体一般定义如下：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">var</span> 变量名字 类型 = 表达式
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> identifier <span style="color:#000;font-weight:bold">struct</span> {
+  field1 type1
+  field2 type2
+  <span style="color:#000;font-weight:bold">...</span>
+}
 </code></pre></td></tr></table>
 </div>
-</div><ol>
-<li>
-<p>其中”类型”或“=表达式”两个部门可以省略其中的一个。</p>
-</li>
-<li>
-<p>如果省略类型信息，那么将根据初始化表达式推导变量的类型信息。</p>
-</li>
-<li>
-<p>如果初始化表达式被省略，那么将用零值初始化该变量。</p>
-<ul>
-<li>数值类型变量对应零值是0；</li>
-<li>布尔类型变量对应零值是false；</li>
-<li>字符串类型对应的零值是空字符串；</li>
-<li>接口或引用类型（包含slice、指针、map、chan和函数）变量对应的零值是nil。</li>
-<li>数组或结构体等聚合类型对应的零值是每个元素或字段都是对应该类型的零值。</li>
+</div><p>例如我们想声明一个学生的结构体类型：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Student <span style="color:#000;font-weight:bold">struct</span> {
+	Name <span style="color:#458;font-weight:bold">string</span>
+	Age <span style="color:#458;font-weight:bold">int</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>结构体中字段的类型可以是任何类型，包括函数类型，接口类型，甚至结构体类型本身。例如我们声明一个链表中的节点的结构体类型。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> ListNode <span style="color:#000;font-weight:bold">struct</span> {
+  Val <span style="color:#458;font-weight:bold">int</span>
+  Next <span style="color:#000;font-weight:bold">*</span>ListNode
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>在声明结构体时我们也可以不给字段指定名字，例如下面这样</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Person <span style="color:#000;font-weight:bold">struct</span> {
+	ID <span style="color:#458;font-weight:bold">string</span>
+	<span style="color:#458;font-weight:bold">int</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>我们可以看到其中有一个int字段没有名字，这种我们称其为<strong>匿名字段</strong>。</p>
+<p>结构体类型的零值是每个成员都是零值。通常会将零值作为最合理的默认值。例如，对于bytes.Buffer类型，结构体初始值就是一个随时可用的空缓存，还有在后续并发编程章节相关的sync.Mutex的零值也是有效的未锁定状态。有时候这种零值可用的特性是自然获得的，但是也有些类型需要一些额外的工作。</p>
+<p>如果结构体没有任何成员的话就是空结构体，写作struct{}。它的大小为0，也不包含任何信息，但是有时候依然是有价值的。有些Go语言程序员用map来模拟set数据结构时，用它来代替map中布尔类型的value，只是强调key的重要性，但是因为节约的空间有限，而且语法比较复杂，所以我们通常会避免这样的用法。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go">seen <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">make</span>(<span style="color:#000;font-weight:bold">map</span>[<span style="color:#458;font-weight:bold">string</span>]<span style="color:#000;font-weight:bold">struct</span>{}) <span style="color:#998;font-style:italic">// set of strings
+</span><span style="color:#998;font-style:italic">// ...
+</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">if</span> _, ok <span style="color:#000;font-weight:bold">:=</span> seen[s]; !ok {
+    seen[s] = <span style="color:#000;font-weight:bold">struct</span>{}{}
+    <span style="color:#998;font-style:italic">// ...first time seeing s...
+</span><span style="color:#998;font-style:italic"></span>}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="结构体使用">结构体使用</h3>
+<p>声明完结构体之后我们需要创建结构体的实例，可以使用如下几种方法创建，仍然以上面的Student结构体为例。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">s1 <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">new</span>(Student) <span style="color:#998;font-style:italic">//第一种方式
+</span><span style="color:#998;font-style:italic"></span>s2 <span style="color:#000;font-weight:bold">:=</span> Student{<span style="color:#d14">&#34;james&#34;</span>, <span style="color:#099">35</span>} <span style="color:#998;font-style:italic">//第二种方式
+</span><span style="color:#998;font-style:italic"></span>s3 <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">&amp;</span>Student { <span style="color:#998;font-style:italic">//第三种方式go
+</span><span style="color:#998;font-style:italic"></span>	Name: <span style="color:#d14">&#34;LeBron&#34;</span>,
+	Age:  <span style="color:#099">36</span>,
+}
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用new函数会创建一个指向结构体类型的指针，创建过程中会自动为结构体分配内存，结构体中每个变量被赋予对应的零值。</li>
+<li>也可以使用第二种方式生命结构类型，需要注意的是此时给结构体赋值的顺序需要与结构体字段声明的顺序一致。</li>
+<li>第三种方式更为常用，我们创建结构体的同时显示的为结构体中每个字段进行赋值。</li>
 </ul>
-<p><strong>零值初始化机制可以确保每个声明的变量总是有一个良好定义的值，因此在 Go 语言中不存在未初始化的变量。</strong></p>
+<p>声明完结构体之后可以直接按如下方式操作结构体。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">s1.Name = <span style="color:#d14">&#34;james&#34;</span>
+s1.Age = <span style="color:#099">35</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>需要注意的是，结构体也仍然遵循可见性规则，要是定义结构体的字段时首字母为小写在其他包是不能直接访问该字段的。</p>
+<p>如果我们将定义的结构体首字母也变为小写那么在其他包内就不能直接创建该结构体，你知道这种情况应该怎么处理么？</p>
+<p>上面我们提到的匿名字段，可以使用如go下方法对其进行操作。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">p <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">new</span>(Person)
+p.ID = <span style="color:#d14">&#34;123&#34;</span>
+p.<span style="color:#458;font-weight:bold">int</span> = <span style="color:#099">10</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们直接通过p.int的方式来访问结构体中的匿名字段对其赋值，通过这个例子也可以发现，对于一个结构体来说，每一种数据类型只能有一个匿名字段。</p>
+<h3 id="标签">标签</h3>
+<p>在go语言中结构体除了字段的名称和类型外还有一个可选的标签tag，标记的tag只有reflect包可以访问到，一般用于orm或者json的数据传递，下面这段代码演示了如何为结构体打标签。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Student <span style="color:#000;font-weight:bold">struct</span> {
+	Name <span style="color:#458;font-weight:bold">string</span> <span style="color:#d14">`json:&#34;name&#34;`</span>
+	Age  <span style="color:#458;font-weight:bold">int</span>    <span style="color:#d14">`json:&#34;age&#34;`</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>我们可以使用go自带的json包将声明的结构体变量转变为json字符串。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -240,147 +381,39 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">var</span> s <span style="color:#458;font-weight:bold">string</span>
-fmt.<span style="color:#900;font-weight:bold">Print</span>(s) <span style="color:#998;font-style:italic">// &#34;&#34;
-</span><span style="color:#998;font-style:italic"></span>   
-<span style="color:#000;font-weight:bold">var</span> i, j, k <span style="color:#458;font-weight:bold">int</span>	<span style="color:#998;font-style:italic">// int, int, int, int
-</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">var</span> b, f, s = <span style="color:#000;font-weight:bold">true</span>, <span style="color:#099">2.3</span>, <span style="color:#d14">&#34;four&#34;</span> <span style="color:#998;font-style:italic">// bool, float64, string
-</span></code></pre></td></tr></table>
-</div>
-</div><p>一组变量也可以通过调用一个函数，由函数返回的多个返回值初始化：</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">var</span> f, err = os.<span style="color:#900;font-weight:bold">Open</span>(name) <span style="color:#998;font-style:italic">// os.Open returns a file and an error
-</span></code></pre></td></tr></table>
-</div>
-</div><h3 id="简短变量声明">简短变量声明</h3>
-<p>在函数内部，有一种称为简短变量声明语句的形式可用于声明和初始化局部变量。它以 “名字 := 表达式” 形式声明变量，变量的类型根据表达式来自动推导。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">anim <span style="color:#000;font-weight:bold">:=</span> gif.GIF{LoopCount: nframes}
-freq <span style="color:#000;font-weight:bold">:=</span> rand.<span style="color:#900;font-weight:bold">Float64</span>() <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">3.0</span>
-t <span style="color:#000;font-weight:bold">:=</span> <span style="color:#099">0.0</span>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">ToJson</span>(s <span style="color:#000;font-weight:bold">*</span>Student) (<span style="color:#458;font-weight:bold">string</span>, <span style="color:#458;font-weight:bold">error</span>) {
+	bytes, err <span style="color:#000;font-weight:bold">:=</span> json.<span style="color:#900;font-weight:bold">Marshal</span>(s)
+	<span style="color:#000;font-weight:bold">if</span> err <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">nil</span> {
+		<span style="color:#000;font-weight:bold">return</span> <span style="color:#d14">&#34;&#34;</span>, <span style="color:#000;font-weight:bold">nil</span>
+	}<span style="color:#000;font-weight:bold">go</span>
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#0086b3">string</span>(bytes), <span style="color:#000;font-weight:bold">nil</span>
+}<span style="color:#000;font-weight:bold">go</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>因为简洁和灵活的特点，**简短变量声明被广泛用于大部分的局部变量的声明和初始化。**var 形式的声明语句往往是用于需要显式指定变量类型地方，或者因为变量稍后会被重新赋值而初始值无关紧要的地方。</p>
+</div><p>如果我们没有给结构体打标签输出的json字符串如下所示</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">i <span style="color:#000;font-weight:bold">:=</span> <span style="color:#099">100</span>                  <span style="color:#998;font-style:italic">// an int
-</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">var</span> boiling <span style="color:#458;font-weight:bold">float64</span> = <span style="color:#099">100</span> <span style="color:#998;font-style:italic">// a float64
-</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">var</span> names []<span style="color:#458;font-weight:bold">string</span>
-<span style="color:#000;font-weight:bold">var</span> err <span style="color:#458;font-weight:bold">error</span>
-<span style="color:#000;font-weight:bold">var</span> p Point
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">{<span style="color:#d14">&#34;Name&#34;</span>:<span style="color:#d14">&#34;james&#34;</span>,<span style="color:#d14">&#34;Age&#34;</span>:<span style="color:#099">35</span>}
 </code></pre></td></tr></table>
 </div>
-</div><p>和 var 形式声明语句一样，简短变量声明语句也可以用来声明和初始化一组变量：</p>
+</div><p>如果我们给结构体打过go标签之后输出的json字符串如下所示</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">i, j <span style="color:#000;font-weight:bold">:=</span> <span style="color:#099">0</span>, <span style="color:#099">1</span>
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">{<span style="color:#d14">&#34;name&#34;</span>:<span style="color:#d14">&#34;james&#34;</span>,<span style="color:#d14">&#34;age&#34;</span>:<span style="color:#099">35</span>}
 </code></pre></td></tr></table>
 </div>
-</div><p>但是这种同时声明多个变量的方式应该限制只在可以提高代码可读性的地方使用，比如 for 语句的循环的初始化语句部分。</p>
-<p>和普通 var 形式的变量声明语句一样，简短变量声明语句也可以用函数的返回值来声明和初始化变量。简短变量声明左边的变量可能并不是全部都是刚刚声明的。如果有一些已经在相同的词法域声明过了（§2.7），那么简短变量声明语句对这些已经声明过的变量就只有赋值行为了。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go">in, err <span style="color:#000;font-weight:bold">:=</span> os.<span style="color:#900;font-weight:bold">Open</span>(infile)
-<span style="color:#998;font-style:italic">// ...
-</span><span style="color:#998;font-style:italic"></span>out, err <span style="color:#000;font-weight:bold">:=</span> os.<span style="color:#900;font-weight:bold">Create</span>(outfile)
-</code></pre></td></tr></table>
-</div>
-</div><p>简短变量声明语句中必须至少要声明一个新的变量，下面的代码将不能编译通过：</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">f, err <span style="color:#000;font-weight:bold">:=</span> os.<span style="color:#900;font-weight:bold">Open</span>(infile)
-<span style="color:#998;font-style:italic">// ...
-</span><span style="color:#998;font-style:italic"></span>f, err <span style="color:#000;font-weight:bold">:=</span> os.<span style="color:#900;font-weight:bold">Create</span>(outfile) <span style="color:#998;font-style:italic">// compile error: no new variables
-</span></code></pre></td></tr></table>
-</div>
-</div><p>简短变量声明语句只有对已经在同级词法域声明过的变量才和赋值操作语句等价，如果变量是在外部词法域声明的，那么简短变量声明语句将会在当前词法域重新声明一个新的变量。</p>
-</li>
-</ol>
-<p>注：</p>
-<ol>
-<li>&ldquo;：=&rdquo; 赋值操作符,高效创建新变量，初始化声明：a := 50 或 b := false，a 和 b 的类型（int 和 bool）将由编译器自动推断。</li>
-<li>这是使用变量的首选形式，但是它只能被用在函数体内，而不可以用于全局变量的声明与赋值。</li>
-<li>在相同的代码块中，我们不可以再次对于相同名称的变量使用初始化声明，但可以赋值；</li>
-<li>声明了一个局部变量却没有在相同的代码块中使用它，同样会得到编译错误</li>
-<li>全局变量可以声明但不用。</li>
-<li>_ 实际上是一个只写变量，你不能得到它的值。这样做是因为 Go 语言中必须使用所有被声明的变量，但有时你并不需要使用从一个函数得到的所有返回值。</li>
-</ol>
-<h2 id="常量">常量</h2>
-<p>常量是一个简单值的标识符，在程序运行时，不会被修改的量。数据类型只可以是<strong>布尔型、数字型（整数型、浮点型和复数）和字符串型</strong>。常量的定义格式：（省略类型说明符 [type]，因为编译器可以根据变量的值来推断其类型。）</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#998;font-style:italic">// const identifier [type] = value
-</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">const</span> b = <span style="color:#d14">&#34;abc&#34;</span>
-<span style="color:#000;font-weight:bold">const</span> c_name1, c_name2 = value1, value2
-<span style="color:#000;font-weight:bold">const</span> pi = <span style="color:#099">3.14159</span> <span style="color:#998;font-style:italic">// approximately; math.Pi is a better approximation
-</span></code></pre></td></tr></table>
-</div>
-</div><p>常用于批量声明：</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">const</span> (
-    e  = <span style="color:#099">2.71828182845904523536028747135266249775724709369995957496696763</span>
-    pi = <span style="color:#099">3.14159265358979323846264338327950288419716939937510582097494459</span>
-)
-<span style="color:#000;font-weight:bold">const</span> (
-  Unknown = <span style="color:#099">0</span>
-  Female = <span style="color:#099">1</span>
-  Male = <span style="color:#099">2</span>
-)
-<span style="color:#099">0</span>,<span style="color:#099">1</span>,<span style="color:#099">2</span> 代表未知<span style="color:#a61717;background-color:#e3d2d2">、</span>女<span style="color:#a61717;background-color:#e3d2d2">、</span>男
-</code></pre></td></tr></table>
-</div>
-</div><p>如果是批量声明的常量，除了第一个外其它的常量右边的初始化表达式都可以省略，如果省略初始化表达式则表示使用前面常量的初始化表达式写法，对应的常量类型也一样的。例如：</p>
+</div><h3 id="内嵌结构体">内嵌结构体</h3>
+<p>之前我们介绍到了匿名字段，结构体作为一种数据类型也可以将其生命为匿名字段，此时我们称其为内嵌结构体，下面这段代码中我们将结构体A嵌入到结构体B中。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -393,19 +426,94 @@ t <span style="color:#000;font-weight:bold">:=</span> <span style="color:#099">0
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">const</span> (
-    a = <span style="color:#099">1</span>
-    b
-    c = <span style="color:#099">2</span>
-    d
-)
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> A <span style="color:#000;font-weight:bold">struct</span> {
+	X, Y <span style="color:#458;font-weight:bold">int</span>
+}
 
-fmt.<span style="color:#900;font-weight:bold">Println</span>(a, b, c, d) <span style="color:#998;font-style:italic">// &#34;1 1 2 2&#34;
-</span></code></pre></td></tr></table>
+<span style="color:#000;font-weight:bold">type</span> B <span style="color:#000;font-weight:bold">struct</span> {
+	A
+	Name <span style="color:#458;font-weight:bold">string</span>
+}
+</code></pre></td></tr></table>
 </div>
-</div><p>所有常量的运算都可以在编译期完成，这样可以减少运行时的工作，也方便其他编译优化。当操作数是常量时，一些运行时的错误也可以在编译时被发现，例如整数除零、字符串索引越界、任何导致无效浮点数的操作等。</p>
-<p>常量间的所有算术运算、逻辑运算和比较运算的结果也是常量，对常量的类型转换操作或以下函数调用都是返回常量结果：len、cap、real、imag、complex 和 unsafe.Sizeof。</p>
-<p>因为它们的值是在编译期就确定的，因此常量可以是构成类型的一部分，例如用于指定数组类型的长度：</p>
+</div><p>通过内嵌结构体的方式我们可以在结构体B的变量下很方便的操作A中定义的字段。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">b <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">new</span>(B)
+b.X = <span style="color:#099">10</span>
+b.Y = <span style="color:#099">20</span>
+b.Name = <span style="color:#d14">&#34;james&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到在b中我们操作结构体A中定义的字段就像结构体B本身定义的字段一样自然。</p>
+<p>但是如果存在字段的名称冲突我们该怎么办？例如我们声明如下一个结构体C。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> C <span style="color:#000;font-weight:bold">struct</span> {
+	A
+  B
+	X <span style="color:#458;font-weight:bold">int</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>此时结构体C中也有字段X，但是内嵌的结构体A中也有字段X，如果我们使用如下这种赋值方式会将X的值赋给谁呢？你可以尝试一下</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">c <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">new</span>(C)
+c.X = <span style="color:#099">10</span>
+c.Y = <span style="color:#099">11</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果上面结构体B也有字段X，那么程序还能成功运行么？</p>
+<p>需要注意的是，内嵌结构体和声明一个结构体类型的字段是不同的，例如下面的结构体B的定义方式与上面是完全不同的。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> B <span style="color:#000;font-weight:bold">struct</span> {
+	a A
+	Name <span style="color:#458;font-weight:bold">string</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>你可以尝试一下在结构体中定义一些复杂类型例如切片，字典等是如何操作的。</p>
+<h2 id="方法">方法</h2>
+<h3 id="方法定义">方法定义</h3>
+<p>方法与函数类似，只不过在方法定义时会在func和方法名之间增加一个参数，如下所示：</p>
+<pre><code>func (r Receiver)func_name(){
+  // body
+}
+</code></pre><p>其中r被称为方法的接收者，例如我们下面这个例子：</p>
+<pre><code>type Person struct {
+	name string
+}
+
+func (p Person) GetName() string {
+	return p.name
+}
+</code></pre><p>其中GetName方法的接收者为p是Person结构体类型，也就是说我们为结构体Person绑定了一个GetName方法，我们可以使用如下的方式进行调用。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -414,46 +522,24 @@ fmt.<span style="color:#900;font-weight:bold">Println</span>(a, b, c, d) <span s
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#000;font-weight:bold">const</span> IPv4Len = <span style="color:#099">4</span>
-
-<span style="color:#998;font-style:italic">// parseIPv4 parses an IPv4 address (d.d.d.d).
-</span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">parseIPv4</span>(s <span style="color:#458;font-weight:bold">string</span>) IP {
-    <span style="color:#000;font-weight:bold">var</span> p [IPv4Len]<span style="color:#458;font-weight:bold">byte</span>
-    <span style="color:#998;font-style:italic">// ...
-</span><span style="color:#998;font-style:italic"></span>}
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+	p <span style="color:#000;font-weight:bold">:=</span> Person{
+		name:<span style="color:#d14">&#34;james&#34;</span>,
+	}
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(p.<span style="color:#900;font-weight:bold">GetName</span>())
+}
 </code></pre></td></tr></table>
 </div>
-</div><p>如果只是简单地复制右边的常量表达式，其实并没有太实用的价值。但是它可以带来其它的特性，那就是 iota 常量生成器语法。</p>
-<h2 id="iota常量生成器">iota常量生成器</h2>
-<p>枚举，将变量的值一一列举出来，变量只限于列举出来的值的范围内取值。Go 语言中没有枚举这种数据类型的，但是可以使用 const 配合 iota 模式来实现。</p>
-<p>常量声明可以使用 iota 常量生成器初始化，它用于生成一组以相似规则初始化的常量，但是不用每行都写一遍初始化表达式。在一个 const 声明语句中，在第一个声明的常量所在的行，iota 将会被置为 0，然后在每一个有常量声明的行加一。</p>
-<p>​	<strong>1. 普通枚举</strong></p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">const</span> (
-    a = <span style="color:#099">0</span>
-	b = <span style="color:#099">1</span>
-	c = <span style="color:#099">2</span>
-	d = <span style="color:#099">3</span>
-)
-</code></pre></td></tr></table>
-</div>
-</div><p>​	<strong>2. 自增枚举</strong></p>
-<ol>
-<li>iota只能用于常量表达式</li>
-<li>它默认开始值是0，const中每增加一行加1,同行值相同</li>
-</ol>
+</div><h3 id="方法接收者">方法接收者</h3>
+<p>对于一个方法来说接收者分为两种类型：值接收者和指针接收者。上面的GetName的接收者就是值接收者。我们再为Person结构体定义一个指针接收者。</p>
+<pre><code>func (p *Person)SetName(name string){
+	p.name = name
+}
+</code></pre><p>使用值接收者定义的方法，在调用的时使用的其实是值接收者的一个拷贝，所以对该值的任何操作，都不会影响原来的类型变量。</p>
+<p>但是如果使用指针接收者的话，在方法体内的修改就会影响原来的变量，因为指针传递的也是地址，但是是指针本身的地址，此时拷贝得到的指针还是指向原值的，所以对指针接收者操作的同时也会影响原来类型变量的值。</p>
+<p>而且在go语言中还有一点比较特殊，我们使用值接收者定义的方法使用指针来调用也是可以的，反过来也是如此，如下所示：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -468,135 +554,110 @@ fmt.<span style="color:#900;font-weight:bold">Println</span>(a, b, c, d) <span s
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">const</span> (
-	a = <span style="color:#000;font-weight:bold">iota</span> <span style="color:#998;font-style:italic">//0
-</span><span style="color:#998;font-style:italic"></span>	c        <span style="color:#998;font-style:italic">//1
-</span><span style="color:#998;font-style:italic"></span>	d        <span style="color:#998;font-style:italic">//2
-</span><span style="color:#998;font-style:italic"></span>)
-<span style="color:#000;font-weight:bold">const</span> (
-	e, f = <span style="color:#000;font-weight:bold">iota</span>, <span style="color:#000;font-weight:bold">iota</span> <span style="color:#998;font-style:italic">//e=0, f=0
-</span><span style="color:#998;font-style:italic"></span>	g    = <span style="color:#000;font-weight:bold">iota</span>       <span style="color:#998;font-style:italic">//g=1
-</span><span style="color:#998;font-style:italic"></span>)
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+	p <span style="color:#000;font-weight:bold">:=</span> <span style="color:#000;font-weight:bold">&amp;</span>Person{
+		name: <span style="color:#d14">&#34;james&#34;</span>,
+	}
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(p.<span style="color:#900;font-weight:bold">GetName</span>())
 
-
-<span style="color:#000;font-weight:bold">type</span> Weekday <span style="color:#458;font-weight:bold">int</span>
-
-<span style="color:#000;font-weight:bold">const</span> (
-    Sunday Weekday = <span style="color:#000;font-weight:bold">iota</span>
-    Monday
-    Tuesday
-    Wednesday
-    Thursday
-    Friday
-    Saturday
-)
+  p1 <span style="color:#000;font-weight:bold">:=</span> Person{
+		name: <span style="color:#d14">&#34;james&#34;</span>,
+	}
+	p1.<span style="color:#900;font-weight:bold">SetName</span>(<span style="color:#d14">&#34;kobe&#34;</span>)
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(p1.<span style="color:#900;font-weight:bold">GetName</span>())
+}
 </code></pre></td></tr></table>
 </div>
-</div><p>​	<strong>3. 显式恢复</strong></p>
-<ol>
-<li>若中间中断iota，必须显式恢复。</li>
-</ol>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">const</span> (
-  a = <span style="color:#000;font-weight:bold">iota</span>    <span style="color:#998;font-style:italic">//0
-</span><span style="color:#998;font-style:italic"></span>  b           <span style="color:#998;font-style:italic">//1
-</span><span style="color:#998;font-style:italic"></span>  c = <span style="color:#099">100</span>     <span style="color:#998;font-style:italic">//100
-</span><span style="color:#998;font-style:italic"></span>  d           <span style="color:#998;font-style:italic">//100
-</span><span style="color:#998;font-style:italic"></span>  e = <span style="color:#000;font-weight:bold">iota</span>    <span style="color:#998;font-style:italic">//4
-</span><span style="color:#998;font-style:italic"></span>)
-</code></pre></td></tr></table>
-</div>
-</div><p>​	<strong>4. 求幂次</strong></p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Flags <span style="color:#458;font-weight:bold">uint</span>
+</div><h2 id="接口">接口</h2>
+<h3 id="接口定义">接口定义</h3>
+<p>接口相当于一种规范，它需要做的是谁想要实现我这个接口要做哪些内容，而不是怎么做。在go语言中接口的定义如下所示：</p>
+<pre><code>type Namer interface {
+    Method1(param_list) return_type
+    Method2(param_list) return_type
+    ...
+}
+</code></pre><h3 id="实现接口">实现接口</h3>
+<p>在go语言中不需要显示的去实现接口，只要一个类型实现了该接口中定义的所有方法就是默认实现了该接口，而且允许多个类型都实现该接口，也允许一个类型实现多个接口。</p>
+<p>案例如下：</p>
+<pre><code>type Animal interface {
+	Eat()
+}
 
-<span style="color:#000;font-weight:bold">const</span> (
-    FlagUp Flags = <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#000;font-weight:bold">iota</span> <span style="color:#998;font-style:italic">// is up
-</span><span style="color:#998;font-style:italic"></span>    FlagBroadcast            <span style="color:#998;font-style:italic">// supports broadcast access capability
-</span><span style="color:#998;font-style:italic"></span>    FlagLoopback             <span style="color:#998;font-style:italic">// is a loopback interface
-</span><span style="color:#998;font-style:italic"></span>    FlagPointToPoint         <span style="color:#998;font-style:italic">// belongs to a point-to-point link
-</span><span style="color:#998;font-style:italic"></span>    FlagMulticast            <span style="color:#998;font-style:italic">// supports multicast access capability
-</span><span style="color:#998;font-style:italic"></span>)
-</code></pre></td></tr></table>
-</div>
-</div><p>注：&laquo; 表示左移的意思，即&laquo;n==*(2^n)。</p>
-<p>本例表示随着 iota 的递增，每个常量对应表达式 1 &laquo; iota，是连续的 2 的幂。</p>
-<p>更复杂的例子，每个常量都是1024的幂：</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#000;font-weight:bold">const</span> (
-    _ = <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> (<span style="color:#099">10</span> <span style="color:#000;font-weight:bold">*</span> <span style="color:#000;font-weight:bold">iota</span>)
-    KiB <span style="color:#998;font-style:italic">// 1024
-</span><span style="color:#998;font-style:italic"></span>    MiB <span style="color:#998;font-style:italic">// 1048576
-</span><span style="color:#998;font-style:italic"></span>    GiB <span style="color:#998;font-style:italic">// 1073741824
-</span><span style="color:#998;font-style:italic"></span>    TiB <span style="color:#998;font-style:italic">// 1099511627776             (exceeds 1 &lt;&lt; 32)
-</span><span style="color:#998;font-style:italic"></span>    PiB <span style="color:#998;font-style:italic">// 1125899906842624
-</span><span style="color:#998;font-style:italic"></span>    EiB <span style="color:#998;font-style:italic">// 1152921504606846976
-</span><span style="color:#998;font-style:italic"></span>    ZiB <span style="color:#998;font-style:italic">// 1180591620717411303424    (exceeds 1 &lt;&lt; 64)
-</span><span style="color:#998;font-style:italic"></span>    YiB <span style="color:#998;font-style:italic">// 1208925819614629174706176
-</span><span style="color:#998;font-style:italic"></span>)
-</code></pre></td></tr></table>
-</div>
-</div><p>_ 实际上是一个只写变量，你不能得到它的值。这样做是因为 Go 语言中必须使用所有被声明的变量，但有时你并不需要使用从一个函数得到的所有返回值。</p>
-<p>不过 iota 常量生成规则也有其局限性。例如，它并不能用于产生 1000 的幂（KB、MB 等），因为 Go 语言并没有计算幂的运算符。</p>
-<h2 id="参考资料">参考资料</h2>
-<p><a href="http://shouce.jb51.net/gopl-zh/">http://shouce.jb51.net/gopl-zh/</a></p>
-<p><a href="https://github.com/datawhalechina/go-talent/blob/master/2.%E5%8F%98%E9%87%8F%E3%80%81%E5%B8%B8%E9%87%8F%E3%80%81%E6%9E%9A%E4%B8%BE.md">https://github.com/datawhalechina/go-talent/blob/master/2.%E5%8F%98%E9%87%8F%E3%80%81%E5%B8%B8%E9%87%8F%E3%80%81%E6%9E%9A%E4%B8%BE.md</a></p>
+type Bird struct {
+	Name string
+}
 
+func (b Bird) Eat() {
+	fmt.Println(b.Name + &quot;吃虫&quot;)
+}
+
+type Dog struct {
+	Name string
+}
+
+func (d Dog) Eat() {
+	fmt.Println(d.Name + &quot;吃肉&quot;)
+}
+
+func EatWhat(a Animal) {
+	a.Eat()
+}
+
+func main() {
+	b := Bird{&quot;Bird&quot;}
+	d := Dog{&quot;Dog&quot;}
+	EatWhat(b)
+	EatWhat(d)
+}
+</code></pre><p>在EatWaht函数中是传递一个Animal接口类型，上面的Bird和Dog结构体都实现了Animal接口，所以都可以传递到函数中去来实现多态特性。</p>
+<p>但是还有几点需要大家去探索一下：</p>
+<ul>
+<li>通过值接收者和指针接收者定义的方法，对于接口的实现有什么影响吗？</li>
+<li>还记得我们之前说过的内嵌结构体么，如果嵌入的结构体实现了某个接口那么对于外部的结构体有什么影响吗？</li>
+</ul>
+<h3 id="类型断言">类型断言</h3>
+<p>有些时候方法传递进来的参数可能是一个接口类型，但是我们要继续判断是哪个具体的类型才能进行下一步操作，这时就用到了类型断言，下面我们通过一个例子来进行讲解：</p>
+<pre><code>func IsDog(a Animal) bool {
+	if v, ok := a.(Dog); ok {
+		fmt.Println(v)
+		return true
+	}
+	return false
+}
+</code></pre><p>上面的方法对传递进来的参数进行判断，判断其是否为Dog类型，如果是Dog类型的话就会将其进行转换为v，ok用来表示是否断言成功。</p>
+<p>但是如果我们对于一个类型有好多种子类型要进行判断，这样写的话显然是有些复杂，可以使用如下这种方式：</p>
+<pre><code>func WhatType(a Animal) {
+	switch a.(type) {
+	case Dog:
+		fmt.Println(&quot;Dog&quot;)
+	case Bird:
+		fmt.Println(&quot;Bird&quot;)
+	default:
+		fmt.Println(&quot;error&quot;)
+	}
+}
+</code></pre><h3 id="空接口">空接口</h3>
+<p>空接口是一个比较特殊的类型，因为其内部没有定义任何方法所以空接口可以表示任何一个类型，比如可以进行下面的操作：</p>
+<pre><code>var any interface{}
+
+any = 1
+fmt.Println(any)
+
+any = &quot;hello&quot;
+fmt.Println(any)
+
+any = false
+fmt.Println(any)
+</code></pre>
         </div>
 
         
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>原文作者：</strong><a rel="author" href="https://www.yushuo.me">yussuy</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.yushuo.me/post/go_babystep3/">https://www.yushuo.me/post/go_babystep3/</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.yushuo.me/post/go_babystep8/">https://www.yushuo.me/post/go_babystep8/</a></li>
         <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
@@ -610,15 +671,15 @@ fmt.<span style="color:#900;font-weight:bold">Println</span>(a, b, c, d) <span s
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/post/go_babystep2/">【初识Go】| Day2 数据类型、关键字、标识符</a></li>
+        <li><a href="/post/go_babystep7/">【初识Go】| Day7 函数</a></li>
         
-        <li><a href="/post/go_babystep1/">【初识Go】| Day1 Go语言特征&amp;开发环境配置</a></li>
+        <li><a href="/post/go_babystep6/">【初识Go】| Day6 数组、切片</a></li>
         
-        <li><a href="/post/myfirst/">Myfirst</a></li>
+        <li><a href="/post/go_babystep5/">【初识Go】| Day5 字典、字符串</a></li>
         
-        <li><a href="/about/">About</a></li>
+        <li><a href="/post/go_babystep4/">【初识Go】| Day4 运算符、控制语句</a></li>
         
-        <li><a href="/search/">搜索</a></li>
+        <li><a href="/post/go_babystep3/">【初识Go】| Day3 变量、常量、枚举（iota）</a></li>
         
     </ul>
 </div>
