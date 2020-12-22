@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 21 Dec 2020 22:11:36 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Dec 2020 20:43:07 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day9 包管理</title>
+      <link>https://www.yushuo.me/post/go_babystep9/</link>
+      <pubDate>Tue, 22 Dec 2020 20:43:07 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep9/</guid>
+      <description>现在随便一个小程序的实现都可能包含超过10000个函数。然而作者一般只需要考虑其中很小的一部分和做很少的设计，因为绝大部分代码都是由他人编写的，它们通过类似包或模块的方式被重用。 Go语言有超过100个的标准包（译注：可以用go list std | wc -l命令查看标准包的具体数目），标准库为大多数</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day8 结构体、方法、接口</title>
       <link>https://www.yushuo.me/post/go_babystep8/</link>
