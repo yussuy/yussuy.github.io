@@ -297,7 +297,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go">seen <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">make</span>(<span style="color:#000;font-weight:bold">map</span>[<span style="color:#458;font-weight:bold">string</span>]<span style="color:#000;font-weight:bold">struct</span>{}) <span style="color:#998;font-style:italic">// set of strings
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">seen <span style="color:#000;font-weight:bold">:=</span> <span style="color:#0086b3">make</span>(<span style="color:#000;font-weight:bold">map</span>[<span style="color:#458;font-weight:bold">string</span>]<span style="color:#000;font-weight:bold">struct</span>{}) <span style="color:#998;font-style:italic">// set of strings
 </span><span style="color:#998;font-style:italic">// ...
 </span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">if</span> _, ok <span style="color:#000;font-weight:bold">:=</span> seen[s]; !ok {
     seen[s] = <span style="color:#000;font-weight:bold">struct</span>{}{}
@@ -502,18 +502,40 @@ c.Y = <span style="color:#099">11</span>
 <h2 id="方法">方法</h2>
 <h3 id="方法定义">方法定义</h3>
 <p>方法与函数类似，只不过在方法定义时会在func和方法名之间增加一个参数，如下所示：</p>
-<pre><code>func (r Receiver)func_name(){
-  // body
-}
-</code></pre><p>其中r被称为方法的接收者，例如我们下面这个例子：</p>
-<pre><code>type Person struct {
-	name string
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> (r Receiver)<span style="color:#900;font-weight:bold">func_name</span>(){
+  <span style="color:#998;font-style:italic">// body
+</span><span style="color:#998;font-style:italic"></span>}
+</code></pre></td></tr></table>
+</div>
+</div><p>其中r被称为方法的接收者，例如我们下面这个例子：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Person <span style="color:#000;font-weight:bold">struct</span> {
+	name <span style="color:#458;font-weight:bold">string</span>
 }
 
-func (p Person) GetName() string {
-	return p.name
+<span style="color:#000;font-weight:bold">func</span> (p Person) <span style="color:#900;font-weight:bold">GetName</span>() <span style="color:#458;font-weight:bold">string</span> {
+	<span style="color:#000;font-weight:bold">return</span> p.name
 }
-</code></pre><p>其中GetName方法的接收者为p是Person结构体类型，也就是说我们为结构体Person绑定了一个GetName方法，我们可以使用如下的方式进行调用。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中GetName方法的接收者为p是Person结构体类型，也就是说我们为结构体Person绑定了一个GetName方法，我们可以使用如下的方式进行调用。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
@@ -534,10 +556,19 @@ func (p Person) GetName() string {
 </div>
 </div><h3 id="方法接收者">方法接收者</h3>
 <p>对于一个方法来说接收者分为两种类型：值接收者和指针接收者。上面的GetName的接收者就是值接收者。我们再为Person结构体定义一个指针接收者。</p>
-<pre><code>func (p *Person)SetName(name string){
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> (p <span style="color:#000;font-weight:bold">*</span>Person)<span style="color:#900;font-weight:bold">SetName</span>(name <span style="color:#458;font-weight:bold">string</span>){
 	p.name = name
 }
-</code></pre><p>使用值接收者定义的方法，在调用的时使用的其实是值接收者的一个拷贝，所以对该值的任何操作，都不会影响原来的类型变量。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用值接收者定义的方法，在调用的时使用的其实是值接收者的一个拷贝，所以对该值的任何操作，都不会影响原来的类型变量。</p>
 <p>但是如果使用指针接收者的话，在方法体内的修改就会影响原来的变量，因为指针传递的也是地址，但是是指针本身的地址，此时拷贝得到的指针还是指向原值的，所以对指针接收者操作的同时也会影响原来类型变量的值。</p>
 <p>而且在go语言中还有一点比较特殊，我们使用值接收者定义的方法使用指针来调用也是可以的，反过来也是如此，如下所示：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
@@ -573,45 +604,92 @@ func (p Person) GetName() string {
 </div><h2 id="接口">接口</h2>
 <h3 id="接口定义">接口定义</h3>
 <p>接口相当于一种规范，它需要做的是谁想要实现我这个接口要做哪些内容，而不是怎么做。在go语言中接口的定义如下所示：</p>
-<pre><code>type Namer interface {
-    Method1(param_list) return_type
-    Method2(param_list) return_type
-    ...
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Namer <span style="color:#000;font-weight:bold">interface</span> {
+    <span style="color:#900;font-weight:bold">Method1</span>(param_list) return_type
+    <span style="color:#900;font-weight:bold">Method2</span>(param_list) return_type
+    <span style="color:#000;font-weight:bold">...</span>
 }
-</code></pre><h3 id="实现接口">实现接口</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="实现接口">实现接口</h3>
 <p>在go语言中不需要显示的去实现接口，只要一个类型实现了该接口中定义的所有方法就是默认实现了该接口，而且允许多个类型都实现该接口，也允许一个类型实现多个接口。</p>
 <p>案例如下：</p>
-<pre><code>type Animal interface {
-	Eat()
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> Animal <span style="color:#000;font-weight:bold">interface</span> {
+	<span style="color:#900;font-weight:bold">Eat</span>()
 }
 
-type Bird struct {
-	Name string
+<span style="color:#000;font-weight:bold">type</span> Bird <span style="color:#000;font-weight:bold">struct</span> {
+	Name <span style="color:#458;font-weight:bold">string</span>
 }
 
-func (b Bird) Eat() {
-	fmt.Println(b.Name + &quot;吃虫&quot;)
+<span style="color:#000;font-weight:bold">func</span> (b Bird) <span style="color:#900;font-weight:bold">Eat</span>() {
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(b.Name <span style="color:#000;font-weight:bold">+</span> <span style="color:#d14">&#34;吃虫&#34;</span>)
 }
 
-type Dog struct {
-	Name string
+<span style="color:#000;font-weight:bold">type</span> Dog <span style="color:#000;font-weight:bold">struct</span> {
+	Name <span style="color:#458;font-weight:bold">string</span>
 }
 
-func (d Dog) Eat() {
-	fmt.Println(d.Name + &quot;吃肉&quot;)
+<span style="color:#000;font-weight:bold">func</span> (d Dog) <span style="color:#900;font-weight:bold">Eat</span>() {
+	fmt.<span style="color:#900;font-weight:bold">Println</span>(d.Name <span style="color:#000;font-weight:bold">+</span> <span style="color:#d14">&#34;吃肉&#34;</span>)
 }
 
-func EatWhat(a Animal) {
-	a.Eat()
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">EatWhat</span>(a Animal) {
+	a.<span style="color:#900;font-weight:bold">Eat</span>()
 }
 
-func main() {
-	b := Bird{&quot;Bird&quot;}
-	d := Dog{&quot;Dog&quot;}
-	EatWhat(b)
-	EatWhat(d)
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+	b <span style="color:#000;font-weight:bold">:=</span> Bird{<span style="color:#d14">&#34;Bird&#34;</span>}
+	d <span style="color:#000;font-weight:bold">:=</span> Dog{<span style="color:#d14">&#34;Dog&#34;</span>}
+	<span style="color:#900;font-weight:bold">EatWhat</span>(b)
+	<span style="color:#900;font-weight:bold">EatWhat</span>(d)
 }
-</code></pre><p>在EatWaht函数中是传递一个Animal接口类型，上面的Bird和Dog结构体都实现了Animal接口，所以都可以传递到函数中去来实现多态特性。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在EatWaht函数中是传递一个Animal接口类型，上面的Bird和Dog结构体都实现了Animal接口，所以都可以传递到函数中去来实现多态特性。</p>
 <p>但是还有几点需要大家去探索一下：</p>
 <ul>
 <li>通过值接收者和指针接收者定义的方法，对于接口的实现有什么影响吗？</li>
@@ -619,38 +697,83 @@ func main() {
 </ul>
 <h3 id="类型断言">类型断言</h3>
 <p>有些时候方法传递进来的参数可能是一个接口类型，但是我们要继续判断是哪个具体的类型才能进行下一步操作，这时就用到了类型断言，下面我们通过一个例子来进行讲解：</p>
-<pre><code>func IsDog(a Animal) bool {
-	if v, ok := a.(Dog); ok {
-		fmt.Println(v)
-		return true
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">IsDog</span>(a Animal) <span style="color:#458;font-weight:bold">bool</span> {
+	<span style="color:#000;font-weight:bold">if</span> v, ok <span style="color:#000;font-weight:bold">:=</span> a.(Dog); ok {
+		fmt.<span style="color:#900;font-weight:bold">Println</span>(v)
+		<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span>
 	}
-	return false
+	<span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>
 }
-</code></pre><p>上面的方法对传递进来的参数进行判断，判断其是否为Dog类型，如果是Dog类型的话就会将其进行转换为v，ok用来表示是否断言成功。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的方法对传递进来的参数进行判断，判断其是否为Dog类型，如果是Dog类型的话就会将其进行转换为v，ok用来表示是否断言成功。</p>
 <p>但是如果我们对于一个类型有好多种子类型要进行判断，这样写的话显然是有些复杂，可以使用如下这种方式：</p>
-<pre><code>func WhatType(a Animal) {
-	switch a.(type) {
-	case Dog:
-		fmt.Println(&quot;Dog&quot;)
-	case Bird:
-		fmt.Println(&quot;Bird&quot;)
-	default:
-		fmt.Println(&quot;error&quot;)
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">WhatType</span>(a Animal) {
+	<span style="color:#000;font-weight:bold">switch</span> a.(<span style="color:#000;font-weight:bold">type</span>) {
+	<span style="color:#000;font-weight:bold">case</span> Dog:
+		fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;Dog&#34;</span>)
+	<span style="color:#000;font-weight:bold">case</span> Bird:
+		fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;Bird&#34;</span>)
+	<span style="color:#000;font-weight:bold">default</span>:
+		fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;error&#34;</span>)
 	}
 }
-</code></pre><h3 id="空接口">空接口</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="空接口">空接口</h3>
 <p>空接口是一个比较特殊的类型，因为其内部没有定义任何方法所以空接口可以表示任何一个类型，比如可以进行下面的操作：</p>
-<pre><code>var any interface{}
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">var</span> any <span style="color:#000;font-weight:bold">interface</span>{}
 
-any = 1
-fmt.Println(any)
+any = <span style="color:#099">1</span>
+fmt.<span style="color:#900;font-weight:bold">Println</span>(any)
 
-any = &quot;hello&quot;
-fmt.Println(any)
+any = <span style="color:#d14">&#34;hello&#34;</span>
+fmt.<span style="color:#900;font-weight:bold">Println</span>(any)
 
-any = false
-fmt.Println(any)
-</code></pre>
+any = <span style="color:#000;font-weight:bold">false</span>
+fmt.<span style="color:#900;font-weight:bold">Println</span>(any)
+</code></pre></td></tr></table>
+</div>
+</div>
         </div>
 
         
@@ -793,6 +916,10 @@ fmt.Println(any)
 <ul class="widget-list">
     
     <li>
+        <a href="https://www.yushuo.me/post/go_babystep10/" title="【初识Go】| Day10 异常处理">【初识Go】| Day10 异常处理</a>
+    </li>
+    
+    <li>
         <a href="https://www.yushuo.me/post/go_babystep9/" title="【初识Go】| Day9 包管理">【初识Go】| Day9 包管理</a>
     </li>
     
@@ -828,10 +955,6 @@ fmt.Println(any)
         <a href="https://www.yushuo.me/post/go_babystep1/" title="【初识Go】| Day1 Go语言特征&amp;开发环境配置">【初识Go】| Day1 Go语言特征&amp;开发环境配置</a>
     </li>
     
-    <li>
-        <a href="https://www.yushuo.me/post/myfirst/" title="Myfirst">Myfirst</a>
-    </li>
-    
 </ul>
     </section>
 
@@ -864,7 +987,7 @@ fmt.Println(any)
         <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
 <ul class="widget-list">
     
-    <li><a href="https://www.yushuo.me/categories/Golang/">Golang (9)</a></li>
+    <li><a href="https://www.yushuo.me/categories/Golang/">Golang (10)</a></li>
     
 </ul>
     </section>

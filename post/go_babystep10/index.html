@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>【初识Go】| Day10 异常处理 | 于硕·Blog</title>
+    <meta property="og:title" content="【初识Go】| Day10 异常处理 - 于硕·Blog">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-12-23T19:09:21&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-12-23T19:09:21&#43;08:00'>
+        
+    <meta name="Keywords" content="golang,go语言,go语言笔记,java,android,blog,博客,项目管理,python,软件架构,公众号,小程序">
+    <meta name="description" content="【初识Go】| Day10 异常处理">
+        
+    <meta name="author" content="yussuy">
+    <meta property="og:url" content="https://www.yushuo.me/post/go_babystep10/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://www.yushuo.me">
+                        于硕·Blog
+                    </a>
+                
+                <p class="description">克己 慎独 &amp;&amp; 我的征途，是星辰大海</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://www.yushuo.me">首页</a>
+                    
+                    <a  href="https://www.yushuo.me/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://www.yushuo.me/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://www.yushuo.me/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#error">error</a>
+      <ul>
+        <li><a href="#error-基本用法">error 基本用法</a></li>
+        <li><a href="#自定义错误类型">自定义错误类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#panic">panic</a></li>
+    <li><a href="#源码分析">源码分析</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">【初识Go】| Day10 异常处理</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年12月23日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='/categories/Golang'>Golang</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="error">error</h2>
+<p>针对这样的情况，Go语言中引入 error 接口类型作为错误处理的标准模式，如果函数要返回错误，则返回值类型列表中肯定包含 error。error 处理过程类似于C语言中的错误码，可逐层返回，直到被处理。</p>
+<p>Go语言内置了一个简单的错误接口作为一种错误处理机制，接口定义如下：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> <span style="color:#458;font-weight:bold">error</span> <span style="color:#000;font-weight:bold">interface</span> {
+	<span style="color:#900;font-weight:bold">Error</span>() <span style="color:#458;font-weight:bold">string</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>它包含一个 <code>Error()</code> 方法，返回值为<code>string</code></p>
+<h3 id="error-基本用法">error 基本用法</h3>
+<p>Go的error构造有两种方式，分别是</p>
+<p><strong>第一种</strong>：errors.New()</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">err <span style="color:#000;font-weight:bold">:=</span> errors.<span style="color:#900;font-weight:bold">New</span>(<span style="color:#d14">&#34;This is an error&#34;</span>)
+<span style="color:#000;font-weight:bold">if</span> err <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">nil</span> {
+  fmt.<span style="color:#900;font-weight:bold">Print</span>(err)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>第二种</strong>（更常使用）：fmt.Errorf()</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">err <span style="color:#000;font-weight:bold">:=</span> fmt.<span style="color:#900;font-weight:bold">Errorf</span>(<span style="color:#d14">&#34;This is an error&#34;</span>)
+<span style="color:#000;font-weight:bold">if</span> err <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">nil</span> {
+  fmt.<span style="color:#900;font-weight:bold">Print</span>(err)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="自定义错误类型">自定义错误类型</h3>
+<p>除了上面的 errors.New 用法之外，我们还可以使用 error 接口自定义一个 Error() 方法，来返回自定义的错误信息。下面以自然数函数作为例子：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">type</span> NotNature <span style="color:#458;font-weight:bold">float64</span>
+
+<span style="color:#000;font-weight:bold">func</span> (err NotNature) <span style="color:#900;font-weight:bold">Error</span>() <span style="color:#458;font-weight:bold">string</span> {
+ <span style="color:#000;font-weight:bold">return</span> fmt.<span style="color:#900;font-weight:bold">Sprintf</span>(<span style="color:#d14">&#34;自然数为大于或等于0的数: %v&#34;</span>, <span style="color:#0086b3">float64</span>(err))
+}
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">Nature</span>(x <span style="color:#458;font-weight:bold">float64</span>) (<span style="color:#458;font-weight:bold">float64</span>,<span style="color:#458;font-weight:bold">error</span>) {
+  <span style="color:#000;font-weight:bold">if</span> x&lt;<span style="color:#099">0</span> {
+   <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>,<span style="color:#900;font-weight:bold">NotNature</span>(x)
+  } <span style="color:#000;font-weight:bold">else</span> {
+  <span style="color:#000;font-weight:bold">return</span> x,<span style="color:#000;font-weight:bold">nil</span>
+  }
+}
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#900;font-weight:bold">Nature</span>(<span style="color:#099">1</span>))
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#900;font-weight:bold">Nature</span>(<span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>))
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><p>需要注意一下几点：</p>
+<p>1.如果函数需要处理异常，通常将error作为多值返回的最后一个值，返回的error值为nil则表示无异常，非nil则是有异常。</p>
+<p>2.一般先用if语句处理error!=nil，正常逻辑放if后面。</p>
+<p>Go语言的error代表的并不是真“异常”，只是通过返回error来表示错误信息，换句话说，不是运行时错误范围预定义的错误，某种不符合期望的行为并不会导致程序无法运行（自然数函数例子），都应使用error进行异常处理。当程序出现重大错误，如数组越界，才会将其当成真正的异常，并用<strong>panic</strong>来处理。</p>
+<h2 id="panic">panic</h2>
+<p>Go不使用try&hellip;catch方法来处理异常，而是使用<strong>panic</strong>和<strong>recover</strong></p>
+<p>Go的类型系统会在编译时捕获很多错误，但有些错误只能在运行时检查，如数组访问越界、空指针引用等。这些运行时错误会引起painc异常。</p>
+<p>一般而言，当panic异常发生时，程序会中断运行，并立即执行在该goroutine（在Day14并发编程中将会学习到）中被延迟的函数（defer 机制）。随后，程序崩溃并输出日志信息。日志信息包括panic value和函数调用的堆栈跟踪信息。panic value通常是某种错误信息。对于每个goroutine，日志信息中都会有与之相对的，发生panic时的函数调用堆栈跟踪信息。通常，我们不需要再次运行程序去定位问题，日志信息已经提供了足够的诊断依据。因此，在我们填写问题报告时，一般会将panic异常和日志信息一并记录。</p>
+<p>不是所有的panic异常都来自运行时，直接调用内置的panic函数也会引发panic异常；panic函数接受任何值作为参数。当某些不应该发生的场景发生时，我们就应该调用panic。比如，当程序到达了某条逻辑上不可能到达的路径。举一个简单的例子：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;Hello,Go!&#34;</span>)
+  <span style="color:#0086b3">panic</span>(errors.<span style="color:#900;font-weight:bold">New</span>(<span style="color:#d14">&#34; i am a error&#34;</span>))
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;hello,again!&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>输出：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">Hello,Go!
+panic:  i am a <span style="color:#458;font-weight:bold">error</span>
+
+goroutine <span style="color:#099">1</span> [running]:
+main.<span style="color:#900;font-weight:bold">main</span>()
+	<span style="color:#a61717;background-color:#e3d2d2">~</span><span style="color:#000;font-weight:bold">/</span><span style="color:#458;font-weight:bold">error</span>.<span style="color:#000;font-weight:bold">go</span>:<span style="color:#099">12</span> <span style="color:#000;font-weight:bold">+</span><span style="color:#099">0xb5</span>
+exit status <span style="color:#099">2</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到，panic后面的程序不会被执行了。但是我们捕捉异常并不是为了停止程序(一般情况)，而是为了让程序能正常运行下去，这时候就到recover出场了。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">package</span> main
+
+<span style="color:#000;font-weight:bold">import</span> <span style="color:#d14">&#34;fmt&#34;</span>
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>(){
+  <span style="color:#000;font-weight:bold">defer</span> <span style="color:#000;font-weight:bold">func</span>(){
+    fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;我是defer里面第一个打印函数&#34;</span>)
+    <span style="color:#000;font-weight:bold">if</span> err<span style="color:#000;font-weight:bold">:=</span><span style="color:#0086b3">recover</span>();err<span style="color:#000;font-weight:bold">!=</span><span style="color:#000;font-weight:bold">nil</span>{
+        fmt.<span style="color:#900;font-weight:bold">Println</span>(err)
+    }
+    fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;我是defer里面第二个打印函数&#34;</span>)
+  }()
+  <span style="color:#900;font-weight:bold">f</span>()
+}
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">f</span>(){
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;1&#34;</span>)
+  <span style="color:#0086b3">panic</span>(<span style="color:#d14">&#34;我是panic&#34;</span>)
+  fmt.<span style="color:#900;font-weight:bold">Println</span>(<span style="color:#d14">&#34;2&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>输出：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#099">1</span>
+我是defer里面第一个打印函数
+我是panic
+我是defer里面第二个打印函数
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到，f函数一开始正常打印，当遇到panic，就跳到defer函数，执行defer函数里的内容</p>
+<p>需要注意的是，defer函数里打印的err其实就是panic里面的内容。</p>
+<p>下面详细介绍一下panic和recover的原理。首先来看一下panic和recover的官方定义</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#0086b3">panic</span>(v <span style="color:#000;font-weight:bold">interface</span>{})
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>内置函数panic会停止当前goroutine的正常执行。当函数F调用panic时，F的正常执行立即停止。任何被F延迟执行的函数都将以正常的方式运行，然后F返回其调用者。对调用方G来说，对F的调用就像调用panic一样，终止G的执行并运行任何延迟的函数。直到执行goroutine中的所有函数都按逆序停止。此时，程序将以非0退出代码终止。此终止序列称为panicking，可由内置函数recover控制。</p>
+</blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">func</span> <span style="color:#0086b3">recover</span>() <span style="color:#000;font-weight:bold">interface</span>{}
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>recover内置函数允许程序管理panicking的goroutine的行为。在defer函数（但不是它调用的任何函数）内执行恢复调用，通过恢复正常执行来停止panicking序列，并检索传递给panic调用的错误值。如果在defer函数之外调用recover，则不会停止panicking的序列。在这种情况下，或者当goroutine不panicking时，或者提供给panic的参数是nil，recover返回nil。因此，recover的返回值报告goroutine是否panicking</p>
+</blockquote>
+<p><strong>ps</strong>：defer和recover必须在panic之前定义，否则无效。</p>
+<h2 id="源码分析">源码分析</h2>
+<p>整个errors包仅只有4行：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#000;font-weight:bold">package</span> errors
+
+<span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">New</span>(text <span style="color:#458;font-weight:bold">string</span>) <span style="color:#458;font-weight:bold">error</span> { <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">&amp;</span>errorString{text} }
+
+<span style="color:#000;font-weight:bold">type</span> errorString <span style="color:#000;font-weight:bold">struct</span> { text <span style="color:#458;font-weight:bold">string</span> }
+
+<span style="color:#000;font-weight:bold">func</span> (e <span style="color:#000;font-weight:bold">*</span>errorString) <span style="color:#900;font-weight:bold">Error</span>() <span style="color:#458;font-weight:bold">string</span> { <span style="color:#000;font-weight:bold">return</span> e.text }
+</code></pre></td></tr></table>
+</div>
+</div><p>承载errorString的类型是一个结构体而非一个字符串，这是为了保护它表示的错误避免粗心（或有意）的更新。并且因为是指针类型<code>*errorString</code>满足error接口而非errorString类型，所以每个New函数的调用都分配了一个独特的和其他错误不相同的实例。我们也不想要重要的error例如io.EOF和一个刚好有相同错误消息的error比较后相等。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">fmt.<span style="color:#900;font-weight:bold">Println</span>(errors.<span style="color:#900;font-weight:bold">New</span>(<span style="color:#d14">&#34;EOF&#34;</span>) <span style="color:#000;font-weight:bold">==</span> errors.<span style="color:#900;font-weight:bold">New</span>(<span style="color:#d14">&#34;EOF&#34;</span>)) <span style="color:#998;font-style:italic">// &#34;false&#34;
+</span></code></pre></td></tr></table>
+</div>
+</div><p>总体来说：</p>
+<p>1.New函数返回格式为给定文本的错误</p>
+<p>2.即使文本是相同的，每次对New的调用都会返回一个不同的错误值。</p>
+<h2 id="参考资料">参考资料</h2>
+<p><a href="http://shouce.jb51.net/gopl-zh/ch7/ch7-08.html">http://shouce.jb51.net/gopl-zh/ch7/ch7-08.html</a></p>
+<p><a href="http://shouce.jb51.net/gopl-zh/ch5/ch5-09.html">http://shouce.jb51.net/gopl-zh/ch5/ch5-09.html</a></p>
+<p><a href="http://c.biancheng.net/view/4284.html">http://c.biancheng.net/view/4284.html</a></p>
+<p><a href="https://github.com/datawhalechina/go-talent/blob/master/9.%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86.md">https://github.com/datawhalechina/go-talent/blob/master/9.%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86.md</a></p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://www.yushuo.me">yussuy</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.yushuo.me/post/go_babystep10/">https://www.yushuo.me/post/go_babystep10/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/go_babystep9/">【初识Go】| Day9 包管理</a></li>
+        
+        <li><a href="/post/go_babystep8/">【初识Go】| Day8 结构体、方法、接口</a></li>
+        
+        <li><a href="/post/go_babystep7/">【初识Go】| Day7 函数</a></li>
+        
+        <li><a href="/post/go_babystep6/">【初识Go】| Day6 数组、切片</a></li>
+        
+        <li><a href="/post/go_babystep5/">【初识Go】| Day5 字典、字符串</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/go'>go</a></li>
+                
+                <li><a href='/tags/golang'>golang</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "your github repo"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2020 <a href="https://www.yushuo.me">于硕·Blog By yussuy</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://www.yushuo.me/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://www.yushuo.me">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep10/" title="【初识Go】| Day10 异常处理">【初识Go】| Day10 异常处理</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep9/" title="【初识Go】| Day9 包管理">【初识Go】| Day9 包管理</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep8/" title="【初识Go】| Day8 结构体、方法、接口">【初识Go】| Day8 结构体、方法、接口</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep7/" title="【初识Go】| Day7 函数">【初识Go】| Day7 函数</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep6/" title="【初识Go】| Day6 数组、切片">【初识Go】| Day6 数组、切片</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep5/" title="【初识Go】| Day5 字典、字符串">【初识Go】| Day5 字典、字符串</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep4/" title="【初识Go】| Day4 运算符、控制语句">【初识Go】| Day4 运算符、控制语句</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep3/" title="【初识Go】| Day3 变量、常量、枚举（iota）">【初识Go】| Day3 变量、常量、枚举（iota）</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep2/" title="【初识Go】| Day2 数据类型、关键字、标识符">【初识Go】| Day2 数据类型、关键字、标识符</a>
+    </li>
+    
+    <li>
+        <a href="https://www.yushuo.me/post/go_babystep1/" title="【初识Go】| Day1 Go语言特征&amp;开发环境配置">【初识Go】| Day1 Go语言特征&amp;开发环境配置</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title" style="color:red">福利派送</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a href="" title="【2019双12】ALL IN CLoud 低至1折" target="_blank" style="color:red">
+                
+                    <img src="https://img.alicdn.com/tfs/TB1_rYHo7P2gK0jSZPxXXacQpXa-690-388.jpg">
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href="" title="助力产业智慧升级，云服务器首年88元起，更有千元代金券礼包免费领！" target="_blank" style="color:red">
+                
+                    <img src="https://upload-dianshi-1255598498.file.myqcloud.com/345-7c71532bd4935fbdd9a67c1a71e577b1767b805c.200%E7%89%88%E6%9C%ACB.jpg">
+                
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://www.yushuo.me/categories/Golang/">Golang (10)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://www.yushuo.me/tags/go/">go</a>
+    
+    <a href="https://www.yushuo.me/tags/golang/">golang</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://blog.csdn.net/u014759944" title="我的CSDN博客">我的CSDN博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="https://cloud.tencent.com/developer/user/1424460/activities" title="我的腾讯云&#43;社区">我的腾讯云&#43;社区</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://www.yushuo.me/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

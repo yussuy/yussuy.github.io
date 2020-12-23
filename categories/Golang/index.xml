@@ -6,7 +6,16 @@
     <description>Recent content in Golang on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 22 Dec 2020 20:43:07 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/categories/Golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Dec 2020 19:09:21 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/categories/Golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day10 异常处理</title>
+      <link>https://www.yushuo.me/post/go_babystep10/</link>
+      <pubDate>Wed, 23 Dec 2020 19:09:21 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep10/</guid>
+      <description>error 针对这样的情况，Go语言中引入 error 接口类型作为错误处理的标准模式，如果函数要返回错误，则返回值类型列表中肯定包含 error。error 处理过程类似于C语言中的错误码，可逐层返回，直到被处理。 Go语言内置了一个简单的错误接口作为一种错误处理机制，接口定义如下： 1 2 3 type error interface { Error() string } 它</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day9 包管理</title>
       <link>https://www.yushuo.me/post/go_babystep9/</link>
