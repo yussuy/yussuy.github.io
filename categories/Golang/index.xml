@@ -6,7 +6,16 @@
     <description>Recent content in Golang on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 23 Dec 2020 19:09:21 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/categories/Golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 14:09:22 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/categories/Golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day11 反射机制</title>
+      <link>https://www.yushuo.me/post/go_babystep11/</link>
+      <pubDate>Thu, 24 Dec 2020 14:09:22 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep11/</guid>
+      <description>反射是什么 反射的概念是由Smith在1982年首次提出的，主要是指程序可以访问、检测和修改它本身状态或行为的一种能力。 有时候我们需要编写一个函数能够处理一类并不满足普通公共接口的类型的值，也可能是因为它们并没有确定的表示方式，或者是在我们设计该函数的时候这些类型可能还不存在。 Go 语</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day10 异常处理</title>
       <link>https://www.yushuo.me/post/go_babystep10/</link>
