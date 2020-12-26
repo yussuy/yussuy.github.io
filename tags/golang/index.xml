@@ -6,7 +6,16 @@
     <description>Recent content in golang on 于硕·Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 25 Dec 2020 22:07:58 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 26 Dec 2020 21:37:16 +0800</lastBuildDate><atom:link href="https://www.yushuo.me/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【初识Go】| Day13 并发编程</title>
+      <link>https://www.yushuo.me/post/go_babystep13/</link>
+      <pubDate>Sat, 26 Dec 2020 21:37:16 +0800</pubDate>
+      
+      <guid>https://www.yushuo.me/post/go_babystep13/</guid>
+      <description>Erlang 之父 Joe Armstrong曾经以下图解释并发与并行。 并发在图中的解释是两队人排队接咖啡，两队切换。 并行是两个咖啡机，两队人同时接咖啡。 “Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once.” — Rob Pike 并发使并行变得容易,并发提供了一种构造解决方案的方法,并行一般伴随这多</description>
+    </item>
+    
     <item>
       <title>【初识Go】| Day12 单元测试</title>
       <link>https://www.yushuo.me/post/go_babystep12/</link>
